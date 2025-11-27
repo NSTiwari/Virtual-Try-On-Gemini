@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Try-On Magic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Virtual Try-On Magic</h1>
+            <p>Upload a person and an apparel item to see them together!</p>
+        </header>
+
+        <form method="POST" enctype="multipart/form-data" id="tryonForm">
+            <div class="upload-grid">
+                <!-- Person Upload Card -->
+                <div class="upload-card">
+                    <label for="person" class="upload-label">
+                        <i class="fas fa-user icon"></i> Upload Person
+                    </label>
+                    <input type="file" id="person" name="person" accept="image/*" required class="file-input">
+                    <div class="image-preview" id="personPreviewContainer">
+                        <img id="personPreview" src="{{ person_url or '' }}" alt="Person Preview" class="preview-img">
+                        <div class="placeholder-content">
+                            <i class="fas fa-camera placeholder-icon"></i>
+                            <p class="placeholder-text">Select an image</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apparel Upload Card -->
+                <div class="upload-card">
+                    <label for="apparel" class="upload-label">
+                        <i class="fas fa-tshirt icon"></i> Upload Apparel
+                    </label>
+                    <input type="file" id="apparel" name="apparel" accept="image/*" required class="file-input">
+                    <div class="image-preview" id="apparelPreviewContainer">
+                        <img id="apparelPreview" src="{{ apparel_url or '' }}" alt="Apparel Preview" class="preview-img">
+                         <div class="placeholder-content">
+                            <i class="fas fa-camera placeholder-icon"></i>
+                            <p class="placeholder-text">Select an image</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Card -->
+                <div class="upload-card output-card">
+                    <label class="upload-label">
+                        <i class="fas fa-magic icon"></i> Result
+                    </label>
+                    <div class="image-preview" id="outputPreviewContainer">
+                        <img id="outputPreview" src="{{ output_url or '' }}" alt="Try-On Result" class="preview-img">
+                        <div class="placeholder-content">
+                            <i class="fas fa-image placeholder-icon"></i>
+                            <p class="placeholder-text">Result will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-exchange-alt"></i> Try On
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function setupImagePreview(inputId, containerId, imgId) {
+                const input = document.getElementById(inputId);
+                const container = document.getElementById(containerId);
+                const img = document.getElementById(imgId);
+
+                // Function to update the view based on image source
+                const updateView = (src) => {
+                    if (src) {
+                        img.src = src;
+                        container.classList.add('has-image');
+                    } else {
+                        img.src = '';
+                        container.classList.remove('has-image');
+                    }
+                };
+
+                // Handle file input change
+                input.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = e => updateView(e.target.result);
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                // Initial check for pre-loaded images from server
+                if (img.src && !img.src.endsWith('/')) {
+                     updateView(img.src);
+                }
+            }
+
+            setupImagePreview('person', 'personPreviewContainer', 'personPreview');
+            setupImagePreview('apparel', 'apparelPreviewContainer', 'apparelPreview');
+
+            // Handle output separately as it doesn't have an input
+            const outputImg = document.getElementById('outputPreview');
+            if (outputImg.src && !outputImg.src.endsWith('/')) {
+                document.getElementById('outputPreviewContainer').classList.add('has-image');
+            }
+
+            // Handle form submission to indicate loading
+            document.getElementById('tryonForm').addEventListener('submit', function() {
+                const submitBtn = this.querySelector('.submit-btn');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Trying On...';
+                submitBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>

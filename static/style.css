@@ -1,0 +1,165 @@
+:root {
+    --primary-color: #6a5acd;
+    --primary-dark: #5a4ac0;
+    --text-color: #333;
+    --light-text-color: #666;
+    --background-light: #f8f8fc;
+    --background-dark: #ebebf5;
+    --card-bg: #ffffff;
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --dashed-border-color: #c9c3e6;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
+    margin: 0;
+    padding: 40px 15px;
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--shadow-medium);
+    padding: 40px 30px;
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5em;
+    font-weight: 700;
+}
+
+header p {
+    color: var(--light-text-color);
+}
+
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.upload-card {
+    background-color: var(--background-dark);
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.15em;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.upload-label .icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.file-input {
+    display: none;
+}
+
+/* --- KEY CHANGES FOR IMAGE PREVIEW --- */
+
+.image-preview {
+    width: 100%;
+    min-height: 280px; /* Provides a good size for the placeholder */
+    border: 2px dashed var(--dashed-border-color);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--card-bg);
+    transition: all 0.2s ease-in-out;
+    position: relative; /* For placeholder positioning */
+}
+
+/* This class is added by JS when an image is loaded */
+.image-preview.has-image {
+    min-height: 0; /* Allows container to shrink */
+    border: none;
+    background-color: transparent;
+}
+
+.placeholder-content {
+    text-align: center;
+    color: var(--light-text-color);
+}
+
+.placeholder-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.image-preview.has-image .placeholder-content {
+    display: none; /* Hide placeholder when image is present */
+}
+
+.preview-img {
+    display: none; /* Hidden by default */
+    max-width: 100%;
+    height: auto; /* Maintains aspect ratio */
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.image-preview.has-image .preview-img {
+    display: block; /* Show image when container has the class */
+}
+
+
+/* --- END OF KEY CHANGES --- */
+
+.submit-btn {
+    padding: 15px 40px;
+    font-size: 1.2em;
+    background-image: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(106, 90, 205, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(106, 90, 205, 0.6);
+}
+
+.submit-btn:disabled {
+    background-image: linear-gradient(45deg, #a0a0a0, #808080);
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+}
