@@ -6,10 +6,13 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
+MODEL = os.getenv("IMAGE_GENERATION_MODEL")
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 app = Flask(__name__)
-client = genai.Client(api_key=GOOGLE_API_KEY)
+client = genai.Client(vertexai=True, project=GCP_PROJECT_ID)
+# client = genai.Client(api_key=GOOGLE_API_KEY)
 
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
